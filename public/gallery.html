@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="lv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pazīt Tevi | Galerija</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f4f0ff;
+        --card: #ffffff;
+        --text: #2f1f45;
+        --line: rgba(62, 40, 96, 0.15);
+        --muted: #7f7991;
+        --accent: #6e55d6;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Manrope", "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      .gallery-page {
+        width: min(1280px, calc(100% - 2rem));
+        margin: 1.2rem auto 2rem;
+      }
+
+      h1 {
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: clamp(2.1rem, 5.6vw, 3.1rem);
+        margin: 0 0 1rem;
+      }
+
+      .back-link {
+        display: inline-block;
+        margin-bottom: 0.55rem;
+        color: var(--muted);
+        font-size: 0.9rem;
+        font-weight: 600;
+        transition: color 180ms ease;
+      }
+
+      .back-link:hover {
+        color: var(--accent);
+      }
+
+      .photos {
+        columns: 4 260px;
+        column-gap: 0.55rem;
+      }
+
+      .photo {
+        border-radius: 16px;
+        border: 1px solid var(--line);
+        background: var(--card);
+        box-shadow: 0 12px 22px rgba(54, 33, 83, 0.12);
+        opacity: 0;
+        transform: translateY(18px) scale(0.98);
+        animation: reveal 800ms ease forwards;
+        overflow: hidden;
+        break-inside: avoid;
+        margin: 0 0 0.55rem;
+      }
+
+      .photo img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        border-radius: 16px;
+        transition: transform 0.4s ease;
+      }
+
+      .photo:hover img {
+        transform: scale(1.04);
+      }
+
+      @keyframes reveal {
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      @media (max-width: 1100px) {
+        .photos {
+          columns: 3 240px;
+        }
+      }
+
+      @media (max-width: 760px) {
+        .photos {
+          columns: 2 170px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="gallery-page">
+      <a class="back-link" href="index.html#gallery">← Atpakaļ</a>
+      <h1>Foto galerija</h1>
+      <div class="photos">
+        <figure class="photo" style="animation-delay: 0.4s"><img src="assets/Galerija/30/adine_meistarklase.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 0.5s"><img src="assets/Galerija/30/angelika_glezno.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 0.6s"><img src="assets/Galerija/30/daudz_pukes.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 0.7s"><img src="assets/Galerija/30/elina_glezno.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 0.8s"><img src="assets/Galerija/30/esanas%20meistarklas.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 0.9s"><img src="assets/Galerija/30/glezno%20pie%20juras.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 1.0s"><img src="assets/Galerija/30/inita_damite.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 1.1s"><img src="assets/Galerija/30/inita_kuka.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 1.2s"><img src="assets/Galerija/30/interve_meitenes.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 1.3s"><img src="assets/Galerija/30/jura_izaicinajums.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 1.4s"><img src="assets/Galerija/30/karina.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 1.5s"><img src="assets/Galerija/30/ketlina.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 1.6s"><img src="assets/Galerija/30/klausas_apl.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 1.7s"><img src="assets/Galerija/30/kosmet_meistarkl.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 1.8s"><img src="assets/Galerija/30/leila_smejas.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 1.9s"><img src="assets/Galerija/30/liga_registej.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 2.0s"><img src="assets/Galerija/30/marta_slave.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 2.1s"><img src="assets/Galerija/30/masas_samilojas.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 2.2s"><img src="assets/Galerija/30/puisu_interv.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 2.3s"><img src="assets/Galerija/30/pukite_piesienas.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 2.4s"><img src="assets/Galerija/30/registracij.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 2.5s"><img src="assets/Galerija/30/registracijas_meitenes.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 2.6s"><img src="assets/Galerija/30/riepu_cina.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 2.7s"><img src="assets/Galerija/30/ruta_ligita.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 2.8s"><img src="assets/Galerija/30/sam_annija.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 2.9s"><img src="assets/Galerija/30/smiltis_izaicin.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 3.0s"><img src="assets/Galerija/30/talu_jura.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 3.1s"><img src="assets/Galerija/30/traktor_vaditajas.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 3.2s"><img src="assets/Galerija/30/una_samilo.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 3.3s"><img src="assets/Galerija/30/vaditajas_smej.webp" alt="" /></figure>
+        <figure class="photo" style="animation-delay: 3.4s"><img src="assets/Galerija/30/volejbols.webp" alt="" /></figure>
+      </div>
+    </main>
+  </body>
+</html>
