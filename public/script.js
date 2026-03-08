@@ -210,101 +210,259 @@ function bindCarouselButton(button, track, direction, batchSize) {
   });
 }
 
-function setupTeamPagination(track, prevButton, nextButton, cardsPerPage = 5, stepSize = 2) {
-  if (!track || !prevButton || !nextButton) {
+function setupInfiniteReviewCarousel(track) {
+  if (!track) {
     return;
   }
 
-  const originalCards = Array.from(track.children);
-  const totalCards = originalCards.length;
-  if (!totalCards) {
+  const sourceCards = Array.from(track.querySelectorAll('.review-card'));
+  if (sourceCards.length < 2) {
     return;
   }
 
-  if (totalCards <= cardsPerPage) {
-    prevButton.disabled = true;
-    nextButton.disabled = true;
-    return;
+  const motionReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let cardsPerView = 3;
+  let currentIndex = 0;
+  let isTransitioning = false;
+  let autoSlideTimer;
+
+  function getCardsPerView() {
+    if (window.innerWidth <= 760) {
+      return 1;
+    }
+    if (window.innerWidth <= 1020) {
+      return 2;
+    }
+    return 3;
   }
 
-  const normalizedStep = Math.max(1, Math.min(stepSize, totalCards));
-
-  function cloneCard(card) {
-    const copy = card.cloneNode(true);
-    copy.setAttribute('aria-hidden', 'true');
-    return copy;
+  function cloneReviewCard(card) {
+    const clone = card.cloneNode(true);
+    clone.dataset.clone = 'true';
+    clone.setAttribute('aria-hidden', 'true');
+    clone.querySelectorAll('button, a, input, textarea, select').forEach((el) => {
+      el.setAttribute('tabindex', '-1');
+    });
+    return clone;
   }
 
-  const cloneBuffer = cardsPerPage + normalizedStep;
-  const prependClones = originalCards.slice(-cloneBuffer).map(cloneCard);
-  const appendClones = originalCards.slice(0, cloneBuffer).map(cloneCard);
-  track.replaceChildren(...prependClones, ...originalCards, ...appendClones);
-
-  let currentStart = 0;
-  let locked = false;
-
-  function getGapPixels() {
-    const computedStyles = window.getComputedStyle(track);
-    const gapValue = computedStyles.columnGap !== 'normal' ? computedStyles.columnGap : computedStyles.gap;
-    return Number.parseFloat(gapValue) || 0;
-  }
-
-  function getCardStepSize() {
-    const firstCard = track.children[0];
+  function getStepPx() {
+    const firstCard = track.querySelector('.review-card');
     if (!firstCard) {
       return 0;
     }
-    return firstCard.getBoundingClientRect().width + getGapPixels();
+    const computedStyles = window.getComputedStyle(track);
+    const gapValue = computedStyles.columnGap !== 'normal' ? computedStyles.columnGap : computedStyles.gap;
+    const gapPx = Number.parseFloat(gapValue) || 0;
+    return firstCard.getBoundingClientRect().width + gapPx;
   }
 
-  function setPosition(startIndex, animate) {
-    const stepSizePx = getCardStepSize();
-    const offset = (startIndex + cloneBuffer) * stepSizePx;
+  function setPosition(animate) {
+    const offset = currentIndex * getStepPx();
     if (!animate) {
       track.style.transition = 'none';
-    }
-    track.style.transform = `translateX(-${offset}px)`;
-    if (!animate) {
+      track.style.transform = `translate3d(-${offset}px, 0, 0)`;
       track.getBoundingClientRect();
-      track.style.transition = '';
-    }
-  }
-
-  function normalizedIndex(index) {
-    if (index < 0) {
-      return ((index % totalCards) + totalCards) % totalCards;
-    }
-    return index % totalCards;
-  }
-
-  function moveBy(stepDirection) {
-    if (locked) {
       return;
     }
-
-    locked = true;
-    const targetStart = currentStart + stepDirection * normalizedStep;
-    const needsWrap = targetStart < 0 || targetStart >= totalCards;
-
-    setPosition(targetStart, true);
-    currentStart = targetStart;
-
-    window.setTimeout(() => {
-      if (needsWrap) {
-        currentStart = normalizedIndex(currentStart);
-        setPosition(currentStart, false);
-      }
-      locked = false;
-    }, 340);
+    track.style.transition = 'transform 700ms cubic-bezier(0.22, 1, 0.36, 1)';
+    track.style.transform = `translate3d(-${offset}px, 0, 0)`;
   }
 
-  prevButton.addEventListener('click', () => moveBy(-1));
-  nextButton.addEventListener('click', () => moveBy(1));
-  window.addEventListener('resize', () => {
-    setPosition(currentStart, false);
+  function rebuildTrack() {
+    cardsPerView = getCardsPerView();
+    const headClones = sourceCards.slice(-cardsPerView).map(cloneReviewCard);
+    const tailClones = sourceCards.slice(0, cardsPerView).map(cloneReviewCard);
+    track.replaceChildren(...headClones, ...sourceCards, ...tailClones);
+    currentIndex = cardsPerView;
+    setPosition(false);
+    setupReviewTruncation(track);
+  }
+
+  function moveBy(direction) {
+    if (isTransitioning) {
+      return;
+    }
+    isTransitioning = true;
+    currentIndex += direction;
+    setPosition(true);
+  }
+
+  function goNext() {
+    moveBy(1);
+  }
+
+  function goPrev() {
+    moveBy(-1);
+  }
+
+  function stopAutoSlide() {
+    if (!autoSlideTimer) {
+      return;
+    }
+    window.clearInterval(autoSlideTimer);
+    autoSlideTimer = undefined;
+  }
+
+  function startAutoSlide() {
+    if (motionReduced) {
+      return;
+    }
+    stopAutoSlide();
+    autoSlideTimer = window.setInterval(goNext, 4200);
+  }
+
+  track.addEventListener('transitionend', () => {
+    const originalCount = sourceCards.length;
+    if (currentIndex >= originalCount + cardsPerView) {
+      currentIndex = cardsPerView;
+      setPosition(false);
+    } else if (currentIndex < cardsPerView) {
+      currentIndex = originalCount + cardsPerView - 1;
+      setPosition(false);
+    }
+    isTransitioning = false;
   });
 
-  setPosition(currentStart, false);
+  let touchStartX = 0;
+  let touchStartY = 0;
+  track.addEventListener(
+    'touchstart',
+    (event) => {
+      const touch = event.touches[0];
+      if (!touch) {
+        return;
+      }
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+      stopAutoSlide();
+    },
+    { passive: true }
+  );
+
+  track.addEventListener(
+    'touchend',
+    (event) => {
+      const touch = event.changedTouches[0];
+      if (!touch) {
+        return;
+      }
+      const deltaX = touch.clientX - touchStartX;
+      const deltaY = touch.clientY - touchStartY;
+      if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY)) {
+        if (deltaX < 0) {
+          goNext();
+        } else {
+          goPrev();
+        }
+      }
+      startAutoSlide();
+    },
+    { passive: true }
+  );
+
+  track.addEventListener('mouseenter', stopAutoSlide);
+  track.addEventListener('mouseleave', startAutoSlide);
+  track.addEventListener('focusin', stopAutoSlide);
+  track.addEventListener('focusout', startAutoSlide);
+
+  let previousPerView = getCardsPerView();
+  window.addEventListener('resize', () => {
+    const nextPerView = getCardsPerView();
+    if (nextPerView !== previousPerView) {
+      previousPerView = nextPerView;
+      rebuildTrack();
+      startAutoSlide();
+    } else {
+      setPosition(false);
+    }
+  });
+
+  rebuildTrack();
+  startAutoSlide();
+}
+
+function setupTeamScroller(track, prevButton, nextButton, stepSize = 1) {
+  if (!track) {
+    return;
+  }
+
+  const cards = Array.from(track.children);
+  if (!cards.length) {
+    return;
+  }
+
+  if (!track.hasAttribute('tabindex')) {
+    track.setAttribute('tabindex', '0');
+  }
+  if (!track.hasAttribute('aria-label')) {
+    track.setAttribute('aria-label', 'Leader cards carousel');
+  }
+
+  const normalizedStep = Math.max(1, stepSize);
+
+  function getCardStepPx() {
+    const computedStyles = window.getComputedStyle(track);
+    const gapValue = computedStyles.columnGap !== 'normal' ? computedStyles.columnGap : computedStyles.gap;
+    const firstCard = track.children[0];
+    const gapPx = Number.parseFloat(gapValue) || 0;
+    if (!firstCard) {
+      return 0;
+    }
+    return firstCard.getBoundingClientRect().width + gapPx;
+  }
+
+  function moveBy(direction) {
+    const stepPx = getCardStepPx();
+    if (!stepPx) {
+      return;
+    }
+    const directionFactor = direction > 0 ? 1 : -1;
+    track.scrollBy({
+      left: directionFactor * stepPx * normalizedStep,
+      behavior: 'smooth',
+    });
+  }
+
+  if (prevButton && nextButton) {
+    prevButton.addEventListener('click', () => moveBy(-1));
+    nextButton.addEventListener('click', () => moveBy(1));
+  }
+
+  track.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      moveBy(-1);
+    }
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      moveBy(1);
+    }
+    if (event.key === 'Home') {
+      event.preventDefault();
+      track.scrollTo({ left: 0, behavior: 'smooth' });
+    }
+    if (event.key === 'End') {
+      event.preventDefault();
+      track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' });
+    }
+  });
+
+  function refreshButtonState() {
+    if (!prevButton || !nextButton) {
+      return;
+    }
+    const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
+    prevButton.disabled = track.scrollLeft <= 2;
+    nextButton.disabled = track.scrollLeft >= maxScroll - 2;
+  }
+
+  window.addEventListener('resize', () => {
+    refreshButtonState();
+  });
+
+  track.addEventListener('scroll', refreshButtonState, { passive: true });
+  refreshButtonState();
 }
 
 function applyTranslations(language) {
@@ -346,39 +504,70 @@ function applyTranslations(language) {
   updateLeaderDescriptionTruncation();
 }
 
-function setupReviewTruncation() {
-  const reviewTexts = document.querySelectorAll('.review-text');
-  reviewTexts.forEach((paragraph) => {
-    const fullText = paragraph.dataset.fulltext || paragraph.textContent.trim();
-    const words = fullText.split(/\s+/);
-    if (words.length <= 50) {
-      paragraph.textContent = fullText;
+function setupReviewTruncation(track = reviewsTrack) {
+  if (!track) {
+    return;
+  }
+
+  const maxPreviewLength = 180;
+  const reviewCards = Array.from(track.querySelectorAll('.review-card'));
+
+  function buildPreviewText(fullText) {
+    const normalized = fullText.trim();
+    if (normalized.length <= maxPreviewLength) {
+      return normalized;
+    }
+    return `${normalized.slice(0, maxPreviewLength).trimEnd()}...`;
+  }
+
+  reviewCards.forEach((card) => {
+    const paragraph = card.querySelector('.review-text');
+    const toggleButton = card.querySelector('.read-more');
+    if (!paragraph) {
       return;
     }
 
-    const shortText = `${words.slice(0, 50).join(' ')}...`;
-    paragraph.textContent = shortText;
+    const fullText = paragraph.dataset.fulltext || paragraph.textContent.trim();
+    const previewText = buildPreviewText(fullText);
+    paragraph.dataset.fulltext = fullText;
+    paragraph.dataset.previewtext = previewText;
+    paragraph.textContent = previewText;
+    card.classList.remove('is-expanded');
 
-    const toggleButton = document.createElement('button');
-    toggleButton.type = 'button';
-    toggleButton.className = 'read-more';
-    toggleButton.textContent = 'lasīt vairāk';
-    toggleButton.dataset.expanded = 'false';
+    if (!toggleButton) {
+      return;
+    }
 
-    toggleButton.addEventListener('click', () => {
-      const expanded = toggleButton.dataset.expanded === 'true';
-      if (expanded) {
-        paragraph.textContent = shortText;
-        toggleButton.textContent = 'lasīt vairāk';
-        toggleButton.dataset.expanded = 'false';
-      } else {
-        paragraph.textContent = fullText;
-        toggleButton.textContent = 'rādīt mazāk';
-        toggleButton.dataset.expanded = 'true';
-      }
-    });
+    toggleButton.textContent = 'Lasīt vairāk';
+  });
 
-    paragraph.insertAdjacentElement('afterend', toggleButton);
+  if (track.dataset.reviewToggleBound === 'true') {
+    return;
+  }
+  track.dataset.reviewToggleBound = 'true';
+
+  track.addEventListener('click', (event) => {
+    const toggleButton = event.target.closest('.read-more');
+    if (!toggleButton || !track.contains(toggleButton)) {
+      return;
+    }
+    const card = toggleButton.closest('.review-card');
+    if (!card) {
+      return;
+    }
+
+    const paragraph = card.querySelector('.review-text');
+    if (!paragraph) {
+      return;
+    }
+
+    const fullText = paragraph.dataset.fulltext || paragraph.textContent.trim();
+    const previewText = paragraph.dataset.previewtext || buildPreviewText(fullText);
+    const expanded = !card.classList.contains('is-expanded');
+
+    card.classList.toggle('is-expanded', expanded);
+    paragraph.textContent = expanded ? fullText : previewText;
+    toggleButton.textContent = expanded ? 'Rādīt mazāk' : 'Lasīt vairāk';
   });
 }
 
@@ -562,13 +751,13 @@ function setupActiveNavLinks() {
   sectionById.forEach((section) => observer.observe(section));
 }
 
-if (teamPrev && teamNext && teamTrack) {
-  setupTeamPagination(teamTrack, teamPrev, teamNext, 4);
+if (teamTrack) {
+  setupTeamScroller(teamTrack, teamPrev, teamNext, 1);
 }
 
-if (reviewPrev && reviewNext && reviewsTrack) {
-  bindCarouselButton(reviewPrev, reviewsTrack, -1, 2);
-  bindCarouselButton(reviewNext, reviewsTrack, 1, 2);
+if (reviewsTrack) {
+  setupInfiniteReviewCarousel(reviewsTrack);
+  setupReviewTruncation(reviewsTrack);
 }
 
 if (langButtons.length) {
@@ -581,7 +770,6 @@ if (langButtons.length) {
   });
 }
 
-setupReviewTruncation();
 setupScrollReveal();
 initializeLucideIcons();
 setupActiveNavLinks();
