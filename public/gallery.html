@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pazīt Tevi | Galerija</title>
+    <link rel="icon" type="image/png" href="assets/Galerija/fav/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -12,11 +13,13 @@
     />
     <style>
       :root {
-        --bg: #f4f0ff;
+        --bg: #2a1f46;
+        --bg-top: #35265b;
+        --bg-bottom: #251b3f;
         --card: #ffffff;
-        --text: #2f1f45;
-        --line: rgba(62, 40, 96, 0.15);
-        --muted: #7f7991;
+        --text: #f4efff;
+        --line: rgba(232, 222, 255, 0.22);
+        --muted: #d6c9fa;
         --accent: #6e55d6;
       }
 
@@ -27,7 +30,9 @@
       body {
         margin: 0;
         font-family: "Manrope", "Segoe UI", sans-serif;
-        background: var(--bg);
+        background:
+          radial-gradient(circle at 50% -18%, rgba(193, 175, 244, 0.24) 0%, rgba(193, 175, 244, 0) 54%),
+          linear-gradient(180deg, var(--bg-top) 0%, var(--bg) 50%, var(--bg-bottom) 100%);
         color: var(--text);
       }
 
@@ -43,16 +48,36 @@
       }
 
       .back-link {
-        display: inline-block;
-        margin-bottom: 0.55rem;
-        color: var(--muted);
-        font-size: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.8rem;
+        padding: 0.58rem 1rem;
+        border-radius: 999px;
+        border: 1px solid rgba(72, 54, 120, 0.16);
+        background: rgba(248, 243, 255, 0.94);
+        color: #3a2c63;
+        font-size: 0.92rem;
         font-weight: 600;
-        transition: color 180ms ease;
+        box-shadow: 0 10px 26px rgba(18, 11, 35, 0.2);
+        transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+      }
+
+      .back-link::before {
+        content: "←";
+        font-size: 1rem;
+        line-height: 1;
       }
 
       .back-link:hover {
-        color: var(--accent);
+        transform: translateY(-1px);
+        background: #ffffff;
+        box-shadow: 0 14px 30px rgba(18, 11, 35, 0.26);
+      }
+
+      .back-link:focus-visible {
+        outline: 2px solid #ddd2ff;
+        outline-offset: 2px;
       }
 
       .photos {
@@ -62,9 +87,9 @@
 
       .photo {
         border-radius: 16px;
-        border: 1px solid var(--line);
-        background: var(--card);
-        box-shadow: 0 12px 22px rgba(54, 33, 83, 0.12);
+        border: 0;
+        background: transparent;
+        box-shadow: 0 10px 24px rgba(8, 4, 18, 0.2);
         opacity: 0;
         transform: translateY(18px) scale(0.98);
         animation: reveal 800ms ease forwards;
@@ -78,11 +103,88 @@
         height: auto;
         object-fit: cover;
         border-radius: 16px;
+        cursor: pointer;
         transition: transform 0.4s ease;
       }
 
       .photo:hover img {
         transform: scale(1.04);
+      }
+
+      .gallery-lightbox {
+        position: fixed;
+        inset: 0;
+        z-index: 1200;
+        display: grid;
+        place-items: center;
+        padding: clamp(20px, 4vw, 44px);
+        background: rgba(11, 7, 24, 0.78);
+        backdrop-filter: blur(3px);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 220ms ease, visibility 220ms ease;
+      }
+
+      body.lightbox-open {
+        overflow: hidden;
+      }
+
+      .gallery-lightbox.is-open {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+
+      .gallery-lightbox-media {
+        max-width: min(94vw, 1160px);
+        max-height: calc(100vh - clamp(84px, 12vh, 130px));
+        width: auto;
+        height: auto;
+        border-radius: 16px;
+        box-shadow: 0 22px 56px rgba(7, 4, 17, 0.58);
+      }
+
+      .lightbox-btn {
+        position: absolute;
+        width: 42px;
+        height: 42px;
+        border-radius: 999px;
+        border: 1px solid rgba(231, 221, 255, 0.46);
+        background: rgba(39, 28, 69, 0.72);
+        color: #f6f1ff;
+        font-size: 24px;
+        line-height: 1;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        transition: background-color 180ms ease, transform 180ms ease;
+      }
+
+      .lightbox-btn:hover {
+        background: rgba(54, 40, 95, 0.9);
+      }
+
+      .lightbox-close {
+        top: clamp(14px, 2vw, 24px);
+        right: clamp(14px, 2vw, 24px);
+      }
+
+      .lightbox-prev {
+        top: 50%;
+        left: clamp(12px, 2vw, 22px);
+        transform: translateY(-50%);
+      }
+
+      .lightbox-next {
+        top: 50%;
+        right: clamp(12px, 2vw, 22px);
+        transform: translateY(-50%);
+      }
+
+      .lightbox-prev:hover,
+      .lightbox-next:hover {
+        transform: translateY(-50%) scale(1.04);
       }
 
       @keyframes reveal {
@@ -107,7 +209,7 @@
   </head>
   <body>
     <main class="gallery-page">
-      <a class="back-link" href="index.html#gallery">← Atpakaļ</a>
+      <a class="back-link" href="index.html#gallery">Atpakaļ</a>
       <h1>Foto galerija</h1>
       <div class="photos">
         <figure class="photo" style="animation-delay: 0.4s"><img src="assets/Galerija/30/adine_meistarklase.webp" alt="" /></figure>
@@ -143,5 +245,91 @@
         <figure class="photo" style="animation-delay: 3.4s"><img src="assets/Galerija/30/volejbols.webp" alt="" /></figure>
       </div>
     </main>
+    <div class="gallery-lightbox" aria-hidden="true">
+      <button type="button" class="lightbox-btn lightbox-close" aria-label="Aizvērt">&times;</button>
+      <button type="button" class="lightbox-btn lightbox-prev" aria-label="Iepriekšējais attēls">&#8249;</button>
+      <img class="gallery-lightbox-media" src="" alt="" />
+      <button type="button" class="lightbox-btn lightbox-next" aria-label="Nākamais attēls">&#8250;</button>
+    </div>
+    <script>
+      (function setupGalleryLightbox() {
+        const images = Array.from(document.querySelectorAll('.photo img'));
+        const lightbox = document.querySelector('.gallery-lightbox');
+        const media = lightbox?.querySelector('.gallery-lightbox-media');
+        const closeButton = lightbox?.querySelector('.lightbox-close');
+        const prevButton = lightbox?.querySelector('.lightbox-prev');
+        const nextButton = lightbox?.querySelector('.lightbox-next');
+        if (!images.length || !lightbox || !media || !closeButton || !prevButton || !nextButton) {
+          return;
+        }
+
+        let activeIndex = 0;
+
+        function updateMedia() {
+          const image = images[activeIndex];
+          if (!image) {
+            return;
+          }
+          media.src = image.currentSrc || image.src;
+          media.alt = image.alt || '';
+        }
+
+        function open(index) {
+          activeIndex = index;
+          updateMedia();
+          lightbox.classList.add('is-open');
+          lightbox.setAttribute('aria-hidden', 'false');
+          document.body.classList.add('lightbox-open');
+        }
+
+        function close() {
+          lightbox.classList.remove('is-open');
+          lightbox.setAttribute('aria-hidden', 'true');
+          document.body.classList.remove('lightbox-open');
+          media.removeAttribute('src');
+        }
+
+        function showPrevious() {
+          activeIndex = (activeIndex - 1 + images.length) % images.length;
+          updateMedia();
+        }
+
+        function showNext() {
+          activeIndex = (activeIndex + 1) % images.length;
+          updateMedia();
+        }
+
+        images.forEach((image, index) => {
+          image.addEventListener('click', () => open(index));
+        });
+
+        closeButton.addEventListener('click', close);
+        prevButton.addEventListener('click', showPrevious);
+        nextButton.addEventListener('click', showNext);
+
+        lightbox.addEventListener('click', (event) => {
+          if (event.target === lightbox) {
+            close();
+          }
+        });
+
+        document.addEventListener('keydown', (event) => {
+          if (!lightbox.classList.contains('is-open')) {
+            return;
+          }
+          if (event.key === 'Escape') {
+            close();
+            return;
+          }
+          if (event.key === 'ArrowLeft') {
+            showPrevious();
+            return;
+          }
+          if (event.key === 'ArrowRight') {
+            showNext();
+          }
+        });
+      })();
+    </script>
   </body>
 </html>
