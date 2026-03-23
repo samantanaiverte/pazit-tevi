@@ -1,4 +1,5 @@
-const langButtons = Array.from(document.querySelectorAll('.lang-btn'));
+const langToggle = document.querySelector('.lang-toggle');
+const langToggleLabel = document.querySelector('.lang-toggle-label');
 const teamTrack = document.getElementById('teamTrack');
 const teamPrev = document.getElementById('teamPrev');
 const teamNext = document.getElementById('teamNext');
@@ -8,6 +9,25 @@ const reviewNext = document.getElementById('reviewNext');
 const navSectionLinks = Array.from(document.querySelectorAll('.main-nav-wrap a[href^="#"]'));
 const focusItems = Array.from(document.querySelectorAll('.focus-item'));
 let currentLanguage = 'lv';
+
+function getNextLanguage(language) {
+  return language === 'en' ? 'lv' : 'en';
+}
+
+function updateLanguageToggle(language) {
+  if (!langToggle || !langToggleLabel) {
+    return;
+  }
+
+  const nextLanguage = getNextLanguage(language);
+  const nextLabel = nextLanguage.toUpperCase();
+  const ariaLabel = nextLanguage === 'en' ? 'Switch to English' : 'Switch to Latvian';
+
+  langToggle.dataset.lang = nextLanguage;
+  langToggleLabel.textContent = nextLabel;
+  langToggle.setAttribute('aria-label', ariaLabel);
+  langToggle.setAttribute('title', ariaLabel);
+}
 
 function t(key, fallback = '') {
   return TRANSLATIONS[currentLanguage]?.[key] || TRANSLATIONS.lv?.[key] || fallback;
@@ -85,6 +105,9 @@ const TRANSLATIONS = {
     'testimonials.roleParticipant': 'NOMETNES DALĪBNIECE',
     'testimonials.prevAria': 'Iepriekšējās atsauksmes',
     'testimonials.nextAria': 'Nākamās atsauksmes',
+    'reviews.modalClose': 'Aizvērt atsauksmi',
+    'reviews.modalPrev': 'Iepriekšējā atsauksme',
+    'reviews.modalNext': 'Nākamā atsauksme',
     'reviews.readMore': 'Lasīt vairāk',
     'reviews.showLess': 'Rādīt mazāk',
     'gallery.lightbox.close': 'Aizvērt attēlu skatītāju',
@@ -93,7 +116,11 @@ const TRANSLATIONS = {
     'gallery.lightbox.openImage': 'Atvērt attēlu',
     'gallery.lightbox.of': 'no',
     'contact.tag': 'Sazinies ar mums',
+    'contact.infoTag': 'kontakti',
     'contact.title': 'Uzdod jautājumu vai piesakies nometnei',
+    'contact.personName': 'Samanta Naiverte',
+    'contact.phoneLabel': 'Tel. Nr.:',
+    'contact.directEmailLabel': 'Epasts:',
     'contact.name': 'Vārds',
     'contact.emailLabel': 'E-pasts',
     'contact.question': 'Jautājums',
@@ -152,6 +179,9 @@ const TRANSLATIONS = {
     'testimonials.roleParticipant': 'CAMP PARTICIPANT',
     'testimonials.prevAria': 'Previous testimonials',
     'testimonials.nextAria': 'Next testimonials',
+    'reviews.modalClose': 'Close testimonial',
+    'reviews.modalPrev': 'Previous testimonial',
+    'reviews.modalNext': 'Next testimonial',
     'reviews.readMore': 'Read more',
     'reviews.showLess': 'Show less',
     'gallery.lightbox.close': 'Close image viewer',
@@ -161,6 +191,10 @@ const TRANSLATIONS = {
     'gallery.lightbox.of': 'of',
     'contact.tag': 'Contact Us',
     'contact.title': 'Ask a Question or Apply for Camp',
+    'contact.infoTag': 'Contacts',
+    'contact.personName': 'Samanta Naiverte',
+    'contact.phoneLabel': 'Phone:',
+    'contact.directEmailLabel': 'Email:',
     'contact.name': 'Name',
     'contact.emailLabel': 'Email',
     'contact.question': 'Question',
@@ -364,6 +398,10 @@ function setupInfiniteReviewCarousel(track) {
     return;
   }
 
+  function isInteractiveTarget(target) {
+    return target instanceof Element && Boolean(target.closest('button, a, input, textarea, select, label'));
+  }
+
   const sourceCards = Array.from(track.querySelectorAll('.review-card'));
   sourceCards.forEach((card, index) => {
     card.dataset.reviewId = String(index);
@@ -555,6 +593,9 @@ function setupInfiniteReviewCarousel(track) {
       return;
     }
     if (event.pointerType === 'mouse' && event.button !== 0) {
+      return;
+    }
+    if (isInteractiveTarget(event.target)) {
       return;
     }
 
@@ -810,9 +851,7 @@ function applyTranslations(language) {
   });
 
   localStorage.setItem('preferredLanguage', activeLanguage);
-  langButtons.forEach((button) => {
-    button.classList.toggle('active', button.dataset.lang === activeLanguage);
-  });
+  updateLanguageToggle(activeLanguage);
 
   applyLeaderAndReviewTranslations(activeLanguage);
   refreshFocusAccordion();
@@ -829,16 +868,7 @@ function setupReviewTruncation(track = reviewsTrack) {
     return;
   }
 
-  const maxPreviewLength = 180;
   const reviewCards = Array.from(track.querySelectorAll('.review-card'));
-
-  function buildPreviewText(fullText) {
-    const normalized = fullText.trim();
-    if (normalized.length <= maxPreviewLength) {
-      return normalized;
-    }
-    return `${normalized.slice(0, maxPreviewLength).trimEnd()}...`;
-  }
 
   reviewCards.forEach((card) => {
     const paragraph = card.querySelector('.review-text');
@@ -848,11 +878,8 @@ function setupReviewTruncation(track = reviewsTrack) {
     }
 
     const fullText = paragraph.dataset.fulltext || paragraph.textContent.trim();
-    const previewText = buildPreviewText(fullText);
     paragraph.dataset.fulltext = fullText;
-    paragraph.dataset.previewtext = previewText;
-    paragraph.textContent = previewText;
-    card.classList.remove('is-expanded');
+    paragraph.textContent = fullText;
 
     if (!toggleButton) {
       return;
@@ -860,34 +887,188 @@ function setupReviewTruncation(track = reviewsTrack) {
 
     toggleButton.textContent = t('reviews.readMore', 'Lasīt vairāk');
   });
+}
 
-  if (track.dataset.reviewToggleBound === 'true') {
+function setupReviewModal(track = reviewsTrack) {
+  if (!track || track.dataset.reviewModalBound === 'true') {
     return;
   }
-  track.dataset.reviewToggleBound = 'true';
+
+  track.dataset.reviewModalBound = 'true';
+  const sourceCards = Array.from(track.querySelectorAll('.review-card')).filter((card) => card.dataset.clone !== 'true');
+  if (!sourceCards.length) {
+    return;
+  }
+
+  const modal = document.createElement('div');
+  modal.className = 'review-modal';
+  modal.setAttribute('aria-hidden', 'true');
+  modal.innerHTML = `
+    <button type="button" class="review-modal-nav review-modal-prev" aria-label="">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M14.5 5.5 8 12l6.5 6.5"></path>
+      </svg>
+    </button>
+    <div class="review-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="reviewModalTitle">
+      <button type="button" class="review-modal-close" aria-label=""></button>
+      <p class="review-modal-role"></p>
+      <h3 class="review-modal-title" id="reviewModalTitle"></h3>
+      <div class="review-modal-body"></div>
+    </div>
+    <button type="button" class="review-modal-nav review-modal-next" aria-label="">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M9.5 5.5 16 12l-6.5 6.5"></path>
+      </svg>
+    </button>
+  `;
+
+  document.body.appendChild(modal);
+
+  const dialog = modal.querySelector('.review-modal-dialog');
+  const prevButton = modal.querySelector('.review-modal-prev');
+  const closeButton = modal.querySelector('.review-modal-close');
+  const nextButton = modal.querySelector('.review-modal-next');
+  const roleElement = modal.querySelector('.review-modal-role');
+  const titleElement = modal.querySelector('.review-modal-title');
+  const bodyElement = modal.querySelector('.review-modal-body');
+
+  if (!dialog || !prevButton || !closeButton || !nextButton || !roleElement || !titleElement || !bodyElement) {
+    modal.remove();
+    return;
+  }
+
+  let lastFocusedElement = null;
+  let activeIndex = 0;
+
+  function getFocusableElements() {
+    return Array.from(
+      modal.querySelectorAll(
+        'button:not([disabled]), [href], input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )
+    ).filter((element) => element.offsetParent !== null);
+  }
+
+  function closeModal() {
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('review-modal-open');
+    bodyElement.textContent = '';
+    if (lastFocusedElement instanceof HTMLElement) {
+      lastFocusedElement.focus();
+    }
+  }
+
+  function updateModalContent() {
+    const card = sourceCards[activeIndex];
+    if (!card) {
+      return;
+    }
+
+    const textElement = card.querySelector('.review-text');
+    const title = card.querySelector('.review-name')?.textContent?.trim() || '';
+    const role = card.querySelector('.review-role')?.textContent?.trim() || '';
+    const fullText = textElement?.dataset.fulltext?.trim() || textElement?.textContent?.trim() || '';
+
+    titleElement.textContent = title;
+    roleElement.textContent = role;
+    bodyElement.textContent = fullText;
+    closeButton.setAttribute('aria-label', t('reviews.modalClose', 'Aizvērt atsauksmi'));
+    prevButton.setAttribute('aria-label', t('reviews.modalPrev', 'Iepriekšējā atsauksme'));
+    nextButton.setAttribute('aria-label', t('reviews.modalNext', 'Nākamā atsauksme'));
+  }
+
+  function openModal(card, trigger) {
+    const cardIndex = sourceCards.findIndex((sourceCard) => sourceCard.dataset.reviewId === card.dataset.reviewId);
+    activeIndex = cardIndex >= 0 ? cardIndex : 0;
+    updateModalContent();
+
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('review-modal-open');
+    lastFocusedElement = trigger;
+    closeButton.focus();
+  }
+
+  function showPrevious() {
+    activeIndex = (activeIndex - 1 + sourceCards.length) % sourceCards.length;
+    updateModalContent();
+  }
+
+  function showNext() {
+    activeIndex = (activeIndex + 1) % sourceCards.length;
+    updateModalContent();
+  }
 
   track.addEventListener('click', (event) => {
     const toggleButton = event.target.closest('.read-more');
     if (!toggleButton || !track.contains(toggleButton)) {
       return;
     }
+
     const card = toggleButton.closest('.review-card');
     if (!card) {
       return;
     }
 
-    const paragraph = card.querySelector('.review-text');
-    if (!paragraph) {
+    openModal(card, toggleButton);
+  });
+
+  prevButton.addEventListener('click', showPrevious);
+  closeButton.addEventListener('click', closeModal);
+  nextButton.addEventListener('click', showNext);
+
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) {
+      closeModal();
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (!modal.classList.contains('is-open')) {
       return;
     }
 
-    const fullText = paragraph.dataset.fulltext || paragraph.textContent.trim();
-    const previewText = paragraph.dataset.previewtext || buildPreviewText(fullText);
-    const expanded = !card.classList.contains('is-expanded');
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      closeModal();
+      return;
+    }
 
-    card.classList.toggle('is-expanded', expanded);
-    paragraph.textContent = expanded ? fullText : previewText;
-    toggleButton.textContent = expanded ? t('reviews.showLess', 'Rādīt mazāk') : t('reviews.readMore', 'Lasīt vairāk');
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      showPrevious();
+      return;
+    }
+
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      showNext();
+      return;
+    }
+
+    if (event.key !== 'Tab') {
+      return;
+    }
+
+    const focusableElements = getFocusableElements();
+    if (!focusableElements.length) {
+      event.preventDefault();
+      return;
+    }
+
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    if (event.shiftKey && document.activeElement === firstElement) {
+      event.preventDefault();
+      lastElement.focus();
+      return;
+    }
+
+    if (!event.shiftKey && document.activeElement === lastElement) {
+      event.preventDefault();
+      firstElement.focus();
+    }
   });
 }
 
@@ -913,13 +1094,14 @@ function refreshGalleryLightboxLabels() {
 }
 
 function setupScrollReveal() {
+  const galleryTargets = Array.from(document.querySelectorAll('.mosaic-grid img'));
   const textTargets = Array.from(
-    document.querySelectorAll('.hero-content, .section-head, .about-text, .focus-points article, .contact-card')
+    document.querySelectorAll('.hero-content, .section-head, .about-text, .focus-points article, .contact-info, .contact-card')
   );
   const mediaTargets = Array.from(
-    document.querySelectorAll('.focus-layout img, .about-image, .mosaic-grid img, .leader-card, .review-card')
+    document.querySelectorAll('.focus-layout img, .about-image, .leader-card, .review-card')
   );
-  const allTargets = [...new Set([...textTargets, ...mediaTargets])];
+  const allTargets = [...new Set([...textTargets, ...mediaTargets, ...galleryTargets])];
 
   if (!allTargets.length) {
     return;
@@ -939,6 +1121,11 @@ function setupScrollReveal() {
   mediaTargets.forEach((element, index) => {
     element.classList.add('reveal', 'reveal-media');
     element.style.transitionDelay = `${Math.min(index * 22, 220)}ms`;
+  });
+
+  galleryTargets.forEach((element, index) => {
+    element.classList.add('reveal-gallery');
+    element.style.transitionDelay = `${Math.min(index * 70, 770)}ms`;
   });
 
   const revealObserver = new IntersectionObserver(
@@ -1045,6 +1232,8 @@ function setupGalleryLightbox() {
     return;
   }
 
+  const galleryMoreHref = document.querySelector('.see-more')?.getAttribute('href') || 'gallery.html';
+
   const lightbox = document.createElement('div');
   lightbox.className = 'gallery-lightbox';
   lightbox.setAttribute('aria-hidden', 'true');
@@ -1068,6 +1257,16 @@ function setupGalleryLightbox() {
   let activeIndex = 0;
   let lastFocusedElement = null;
 
+  function updateNextButtonState() {
+    const isLastImage = activeIndex === galleryImages.length - 1;
+    nextButton.classList.toggle('is-more-link', isLastImage);
+    nextButton.innerHTML = isLastImage ? `<span>${t('gallery.more', 'Skatīt vairāk')}</span>` : '&#8250;';
+    nextButton.setAttribute(
+      'aria-label',
+      isLastImage ? t('gallery.more', 'Skatīt vairāk') : t('gallery.lightbox.next', 'Next image')
+    );
+  }
+
   function updateMedia() {
     const sourceImage = galleryImages[activeIndex];
     if (!sourceImage) {
@@ -1075,6 +1274,7 @@ function setupGalleryLightbox() {
     }
     media.src = sourceImage.currentSrc || sourceImage.src;
     media.alt = sourceImage.alt || '';
+    updateNextButtonState();
   }
 
   function open(index) {
@@ -1103,7 +1303,12 @@ function setupGalleryLightbox() {
   }
 
   function showNext() {
-    activeIndex = (activeIndex + 1) % galleryImages.length;
+    if (activeIndex === galleryImages.length - 1) {
+      window.location.href = galleryMoreHref;
+      return;
+    }
+
+    activeIndex += 1;
     updateMedia();
   }
 
@@ -1215,15 +1420,15 @@ if (teamTrack) {
 if (reviewsTrack) {
   setupInfiniteReviewCarousel(reviewsTrack);
   setupReviewTruncation(reviewsTrack);
+  setupReviewModal(reviewsTrack);
 }
 
-if (langButtons.length) {
-  const savedLanguage = localStorage.getItem('preferredLanguage') || 'lv';
-  applyTranslations(savedLanguage);
-  langButtons.forEach((button) => {
-    button.addEventListener('click', () => {
-      applyTranslations(button.dataset.lang);
-    });
+const savedLanguage = localStorage.getItem('preferredLanguage') || 'lv';
+applyTranslations(savedLanguage);
+
+if (langToggle) {
+  langToggle.addEventListener('click', () => {
+    applyTranslations(langToggle.dataset.lang || getNextLanguage(currentLanguage));
   });
 }
 
