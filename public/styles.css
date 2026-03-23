@@ -896,7 +896,7 @@ img {
     radial-gradient(circle at 50% -20%, rgba(198, 182, 245, 0.2) 0%, rgba(198, 182, 245, 0) 56%),
     linear-gradient(180deg, #35265a 0%, #2d214c 52%, #261c40 100%);
   border-radius: 0;
-  padding: 104px 0 76px;
+  padding: 50px 0 76px;
 }
 
 .gallery-section > * {
