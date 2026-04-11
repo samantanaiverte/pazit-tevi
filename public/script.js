@@ -64,6 +64,9 @@ const TRANSLATIONS = {
     'nav.gallery': 'Foto mirkļi',
     'nav.testimonials': 'Atsauksmes',
     'nav.contact': 'Sazinies ar mums',
+    'nav.donate': 'Ziedot',
+    'nav.donateAria': 'Ziedot nometnei',
+    'nav.donateTitle': 'Atbalsti nometni',
     'hero.kicker': 'MEITEŅU NOMETNE',
     'hero.title': 'Pazīt Tevi',
     'hero.badge': '2026',
@@ -117,14 +120,18 @@ const TRANSLATIONS = {
     'gallery.lightbox.of': 'no',
     'contact.tag': 'Sazinies ar mums',
     'contact.infoTag': 'kontakti',
+    'contact.mainTitle': 'Kontakti',
     'contact.title': 'Uzdod jautājumu vai piesakies nometnei',
     'contact.personName': 'Samanta Naiverte',
     'contact.phoneLabel': 'Tel. Nr.:',
     'contact.directEmailLabel': 'Epasts:',
     'contact.name': 'Vārds',
     'contact.emailLabel': 'E-pasts',
-    'contact.question': 'Jautājums',
+    'contact.question': 'Tava ziņa',
     'contact.send': 'Nosūtīt',
+    'contact.verse':
+      'Pāri <span class="contact-verse-script">visam</span>, kas jāsarga, <span class="contact-verse-script">sargi</span> savu sirdi, jo no turienes rosās dzīvība!',
+    'contact.verseRef': 'Salamana Pamācības 4:23',
     'footer.emailLabel': 'E-pasts:',
     'footer.phoneLabel': 'Tālrunis:',
   },
@@ -133,11 +140,14 @@ const TRANSLATIONS = {
     'nav.logo': 'Pazit Tevi',
     'nav.home': 'Home',
     'nav.focus': 'Our Focus',
-    'nav.about': 'About',
+    'nav.about': 'About Us',
     'nav.team': 'Team',
     'nav.gallery': 'Gallery',
     'nav.testimonials': 'Testimonials',
     'nav.contact': 'Contact',
+    'nav.donate': 'Donate',
+    'nav.donateAria': 'Donate to the camp',
+    'nav.donateTitle': 'Support the camp',
     'hero.kicker': "GIRLS' CAMP",
     'hero.title': 'Pazit Tevi',
     'hero.badge': '2026',
@@ -173,7 +183,7 @@ const TRANSLATIONS = {
     'team.nextAria': 'Next cards',
     'gallery.tag': 'Gallery',
     'gallery.title': 'Camp Moments',
-    'gallery.more': 'See More',
+    'gallery.more': 'View More',
     'testimonials.tag': 'Testimonials',
     'testimonials.title': 'What Girls Say After Camp',
     'testimonials.roleParticipant': 'CAMP PARTICIPANT',
@@ -190,15 +200,19 @@ const TRANSLATIONS = {
     'gallery.lightbox.openImage': 'Open image',
     'gallery.lightbox.of': 'of',
     'contact.tag': 'Contact Us',
+    'contact.mainTitle': 'Contact',
     'contact.title': 'Ask a Question or Apply for Camp',
-    'contact.infoTag': 'Contacts',
+    'contact.infoTag': 'Contact',
     'contact.personName': 'Samanta Naiverte',
     'contact.phoneLabel': 'Phone:',
     'contact.directEmailLabel': 'Email:',
     'contact.name': 'Name',
     'contact.emailLabel': 'Email',
-    'contact.question': 'Question',
+    'contact.question': 'Your Message',
     'contact.send': 'Send Message',
+    'contact.verse':
+      'Above all else, guard your <span class="contact-verse-script">heart</span>, for everything you do flows from it.',
+    'contact.verseRef': 'Proverbs 4:23',
     'footer.emailLabel': 'Email:',
     'footer.phoneLabel': 'Phone:',
   },
@@ -411,7 +425,7 @@ function setupInfiniteReviewCarousel(track) {
   }
 
   const motionReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const dragThresholdPx = 8;
+  const dragThresholdPx = 12;
   const autoResumeDelayMs = 2800;
   let cardsPerView = 3;
   let currentIndex = 0;
@@ -607,9 +621,7 @@ function setupInfiniteReviewCarousel(track) {
     dragDeltaX = 0;
     isDragging = false;
     track.classList.add('is-dragging');
-    if (event.pointerType !== 'touch') {
-      track.setPointerCapture(event.pointerId);
-    }
+    track.setPointerCapture(event.pointerId);
   });
 
   track.addEventListener('pointermove', (event) => {
@@ -630,10 +642,11 @@ function setupInfiniteReviewCarousel(track) {
       isDragging = true;
     }
 
+    event.preventDefault();
     dragDeltaX = deltaX;
     suppressClick = true;
     setOffset(dragStartOffset - dragDeltaX, false);
-  });
+  }, { passive: false });
 
   function finishPointerInteraction(event) {
     if (activePointerId !== event.pointerId) {
