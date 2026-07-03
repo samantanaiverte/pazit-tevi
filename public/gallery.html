@@ -29,9 +29,18 @@
         --accent: #6e55d6;
       }
 
-      * {
-        box-sizing: border-box;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pazīt Tevi | Galerija</title>
+  <link rel="icon" type="image/png" href="assets/Galerija/fav/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
 
       body {
         margin: 0;
@@ -266,85 +275,93 @@
       <img class="gallery-lightbox-media" src="" alt="" />
       <button type="button" class="lightbox-btn lightbox-next" aria-label="Nākamais attēls">&#8250;</button>
     </div>
-    <script>
-      (function setupGalleryLightbox() {
-        const images = Array.from(document.querySelectorAll('.photo img'));
-        const lightbox = document.querySelector('.gallery-lightbox');
-        const media = lightbox?.querySelector('.gallery-lightbox-media');
-        const closeButton = lightbox?.querySelector('.lightbox-close');
-        const prevButton = lightbox?.querySelector('.lightbox-prev');
-        const nextButton = lightbox?.querySelector('.lightbox-next');
-        if (!images.length || !lightbox || !media || !closeButton || !prevButton || !nextButton) {
+  </main>
+  <div class="gallery-lightbox" aria-hidden="true">
+    <button type="button" class="lightbox-btn lightbox-close" aria-label="AizvÄ“rt">&times;</button>
+    <button type="button" class="lightbox-btn lightbox-prev" aria-label="IepriekÅ¡Ä“jais attÄ“ls">&#8249;</button>
+    <img class="gallery-lightbox-media" src="" alt="" />
+    <button type="button" class="lightbox-btn lightbox-next" aria-label="NÄkamais attÄ“ls">&#8250;</button>
+  </div>
+  <script>
+    (function setupGalleryLightbox() {
+      const images = Array.from(document.querySelectorAll('.photo img'));
+      const lightbox = document.querySelector('.gallery-lightbox');
+      const media = lightbox?.querySelector('.gallery-lightbox-media');
+      const closeButton = lightbox?.querySelector('.lightbox-close');
+      const prevButton = lightbox?.querySelector('.lightbox-prev');
+      const nextButton = lightbox?.querySelector('.lightbox-next');
+      if (!images.length || !lightbox || !media || !closeButton || !prevButton || !nextButton) {
+        return;
+      }
+
+      let activeIndex = 0;
+
+      function updateMedia() {
+        const image = images[activeIndex];
+        if (!image) {
           return;
         }
+        media.src = image.currentSrc || image.src;
+        media.alt = image.alt || '';
+      }
 
-        let activeIndex = 0;
+      function open(index) {
+        activeIndex = index;
+        updateMedia();
+        lightbox.classList.add('is-open');
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('lightbox-open');
+      }
 
-        function updateMedia() {
-          const image = images[activeIndex];
-          if (!image) {
-            return;
-          }
-          media.src = image.currentSrc || image.src;
-          media.alt = image.alt || '';
+      function close() {
+        lightbox.classList.remove('is-open');
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('lightbox-open');
+        media.removeAttribute('src');
+      }
+
+      function showPrevious() {
+        activeIndex = (activeIndex - 1 + images.length) % images.length;
+        updateMedia();
+      }
+
+      function showNext() {
+        activeIndex = (activeIndex + 1) % images.length;
+        updateMedia();
+      }
+
+      images.forEach((image, index) => {
+        image.addEventListener('click', () => open(index));
+      });
+
+      closeButton.addEventListener('click', close);
+      prevButton.addEventListener('click', showPrevious);
+      nextButton.addEventListener('click', showNext);
+
+      lightbox.addEventListener('click', (event) => {
+        if (event.target === lightbox) {
+          close();
         }
+      });
 
-        function open(index) {
-          activeIndex = index;
-          updateMedia();
-          lightbox.classList.add('is-open');
-          lightbox.setAttribute('aria-hidden', 'false');
-          document.body.classList.add('lightbox-open');
+      document.addEventListener('keydown', (event) => {
+        if (!lightbox.classList.contains('is-open')) {
+          return;
         }
-
-        function close() {
-          lightbox.classList.remove('is-open');
-          lightbox.setAttribute('aria-hidden', 'true');
-          document.body.classList.remove('lightbox-open');
-          media.removeAttribute('src');
+        if (event.key === 'Escape') {
+          close();
+          return;
         }
-
-        function showPrevious() {
-          activeIndex = (activeIndex - 1 + images.length) % images.length;
-          updateMedia();
+        if (event.key === 'ArrowLeft') {
+          showPrevious();
+          return;
         }
-
-        function showNext() {
-          activeIndex = (activeIndex + 1) % images.length;
-          updateMedia();
+        if (event.key === 'ArrowRight') {
+          showNext();
         }
+      });
+    })();
+  </script>
+</body>
 
-        images.forEach((image, index) => {
-          image.addEventListener('click', () => open(index));
-        });
-
-        closeButton.addEventListener('click', close);
-        prevButton.addEventListener('click', showPrevious);
-        nextButton.addEventListener('click', showNext);
-
-        lightbox.addEventListener('click', (event) => {
-          if (event.target === lightbox) {
-            close();
-          }
-        });
-
-        document.addEventListener('keydown', (event) => {
-          if (!lightbox.classList.contains('is-open')) {
-            return;
-          }
-          if (event.key === 'Escape') {
-            close();
-            return;
-          }
-          if (event.key === 'ArrowLeft') {
-            showPrevious();
-            return;
-          }
-          if (event.key === 'ArrowRight') {
-            showNext();
-          }
-        });
-      })();
-    </script>
-  </body>
 </html>

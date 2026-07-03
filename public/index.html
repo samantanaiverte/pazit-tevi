@@ -19,20 +19,33 @@
     <header class="hero" id="top">
       <div class="hero-overlay"></div>
 
-      <nav class="top-nav" id="mainNav">
-        <a href="#top" class="nav-logo" aria-label="Pazīt Tevi sākumlapa">
-          <img src="assets/Hero_page/logo.webp" alt="Pazīt Tevi logo" class="logo-image" />
-        </a>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="meta.title">Pazīt Tevi | Meiteņu Nometne</title>
+  <link rel="icon" type="image/png" href="assets/Galerija/fav/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preload" as="image" href="assets/vaditajas/marta.webp" />
+  <link rel="preload" as="image" href="assets/vaditajas/sabine.webp" />
+  <link rel="preload" as="image" href="assets/vaditajas/agate.webp" />
+  <link rel="preload" as="image" href="assets/vaditajas/samanta.webp" />
+  <link rel="preload" as="image" href="assets/vaditajas/ance.webp" />
+  <link rel="preload" as="image" href="assets/vaditajas/agnese.webp" />
+  <link rel="preload" as="image" href="assets/vaditajas/zanda.webp" />
+  <link rel="preload" as="image" href="assets/vaditajas/amanda.webp" />
+  <link rel="preload" as="image" href="assets/vaditajas/diana.webp" />
+  <link rel="preload" as="image" href="assets/vaditajas/karline.webp" />
+  <link rel="preload" as="image" href="assets/vaditajas/guna.webp" />
+</head>
 
-        <div class="main-nav-wrap">
-          <a href="#top" data-i18n="nav.home">Sākums</a>
-          <a href="#focus" data-i18n="nav.focus">Fokuss</a>
-          <a href="#about" data-i18n="nav.about">Par mums</a>
-          <a href="#team" data-i18n="nav.team">Komanda</a>
-          <a href="#gallery" data-i18n="nav.gallery">Foto mirkļi</a>
-          <a href="#testimonials" data-i18n="nav.testimonials">Atsauksmes</a>
-          <a href="#contact" data-i18n="nav.contact">Sazinies ar mums</a>
-        </div>
+<body>
+  <header class="hero" id="top">
+    <div class="hero-overlay"></div>
 
         <div class="top-nav-actions">
           <a class="social-icon" href="https://www.facebook.com/pazitsevi" target="_blank" rel="noreferrer" aria-label="Facebook">
@@ -80,89 +93,105 @@
         <p class="hero-caption" data-i18n="hero.caption">30. jūlijs — 2. augusts</p>
         <a href="https://docs.google.com/forms/d/e/1FAIpQLSccI2GHdu2BFEukZKq_CNhr7xhRUPAUCy51gvwIo7NWw7q-Ww/viewform" target="_blank" rel="noreferrer" class="btn btn-hero" data-i18n="hero.cta">Piesakies šī gada nometnei</a>
       </div>
-    </header>
 
-    <main>
-      <section class="section-block focus-section" id="focus">
-        <div class="section-head center">
-          <h2 data-i18n="focus.title">Mūsu fokuss</h2>
-          <p class="focus-subtitle" data-i18n="focus.subtitle">Sagatavot dievbijīgas sievietes nākamajai dzīves sezonai.</p>
+      <div class="top-nav-actions">
+        <a class="social-icon" href="https://www.facebook.com/pazitsevi" target="_blank" rel="noreferrer"
+          aria-label="Facebook">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M13.5 22v-8h2.6l.4-3h-3V9.1c0-.9.3-1.6 1.6-1.6h1.7V4.8c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.5-4 4.2V11H8v3h2.4v8h3.1Z" />
+          </svg>
+        </a>
+        <a class="social-icon"
+          href="https://www.instagram.com/pazit.tevi?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+          target="_blank" rel="noreferrer" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M7.8 2h8.4A5.8 5.8 0 0 1 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8A5.8 5.8 0 0 1 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2Zm8.3 1.9H7.9a4 4 0 0 0-4 4v8.2a4 4 0 0 0 4 4h8.2a4 4 0 0 0 4-4V7.9a4 4 0 0 0-4-4ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 1.9a3.1 3.1 0 1 0 0 6.2 3.1 3.1 0 0 0 0-6.2Zm5.4-2a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4Z" />
+          </svg>
+        </a>
+        <div class="lang-toggle" aria-label="Language switch">
+          <button type="button" class="lang-btn active" data-lang="lv">LV</button>
+          <button type="button" class="lang-btn" data-lang="en">EN</button>
         </div>
-        <div class="focus-layout">
-          <img src="assets/Fokuss.webp" alt="Meitenes aktivitātēs dabā" data-i18n-attr="alt:focus.imageAlt" />
-          <div class="focus-points">
-            <article class="focus-item">
-              <button class="focus-trigger" type="button" aria-expanded="false">
-                <span class="focus-icon" aria-hidden="true"><i data-lucide="leaf"></i></span>
-                <h3 class="focus-heading" data-i18n="focus.item1.title">Laiks dabā</h3>
-                <span class="focus-chevron" aria-hidden="true"><i data-lucide="chevron-down"></i></span>
-              </button>
-              <div class="focus-panel">
-                <p data-i18n="focus.item1.copy">Mēs daudz laika pavadām svaigā gaisā: sarunās, spēlēs, pastaigās un kopīgos piedzīvojumos.</p>
-              </div>
-            </article>
-            <article class="focus-item">
-              <button class="focus-trigger" type="button" aria-expanded="false">
-                <span class="focus-icon" aria-hidden="true"><i data-lucide="palette"></i></span>
-                <h3 class="focus-heading" data-i18n="focus.item2.title">Meistarklases un radošums</h3>
-                <span class="focus-chevron" aria-hidden="true"><i data-lucide="chevron-down"></i></span>
-              </button>
-              <div class="focus-panel">
-                <p data-i18n="focus.item2.copy">No ēst gatavošanas līdz kustībai, skaistumkopšanai un radošām aktivitātēm.</p>
-              </div>
-            </article>
-            <article class="focus-item">
-              <button class="focus-trigger" type="button" aria-expanded="false">
-                <span class="focus-icon" aria-hidden="true"><i data-lucide="sparkles"></i></span>
-                <h3 class="focus-heading" data-i18n="focus.item3.title">Garīgā izaugsme</h3>
-                <span class="focus-chevron" aria-hidden="true"><i data-lucide="chevron-down"></i></span>
-              </button>
-              <div class="focus-panel">
-                <p data-i18n="focus.item3.copy">Nometnes centrā ir laiks ar Dievu. Lekcijās, sarunās un klusumā mācāmies labāk iepazīt Dievu un sevi.</p>
-              </div>
-            </article>
-            <article class="focus-item">
-              <button class="focus-trigger" type="button" aria-expanded="false">
-                <span class="focus-icon" aria-hidden="true"><i data-lucide="mountain"></i></span>
-                <h3 class="focus-heading" data-i18n="focus.item4.title">Izaicinājumi, kas stiprina</h3>
-                <span class="focus-chevron" aria-hidden="true"><i data-lucide="chevron-down"></i></span>
-              </button>
-              <div class="focus-panel">
-                <p data-i18n="focus.item4.copy">Ir arī brīži, kas palīdz pārkāpt savām robežām, vairojot drosmi, izturību, uzticēšanos sev un komandai.</p>
-              </div>
-            </article>
-            <article class="focus-item">
-              <button class="focus-trigger" type="button" aria-expanded="false">
-                <span class="focus-icon" aria-hidden="true"><i data-lucide="heart"></i></span>
-                <h3 class="focus-heading" data-i18n="focus.item5.title">Kopība</h3>
-                <span class="focus-chevron" aria-hidden="true"><i data-lucide="chevron-down"></i></span>
-              </button>
-              <div class="focus-panel">
-                <p data-i18n="focus.item5.copy">Svarīga nometnes daļa ir būt kopā. Sarunas, smiekli un draudzība, kur vari būt pieņemta tāda, kāda esi.</p>
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
+      </div>
+    </nav>
 
-      <section class="section-block split about-section" id="about">
-        <div class="about-text">
-          <p class="section-tag" data-i18n="about.tag">Par mums</p>
-          <h2 data-i18n="about.title">Pazīt Tevi komanda</h2>
-          <p data-i18n="about.copy">
-            <span class="about-lead">PAZĪT TEVI ir kristīga nometne sievietēm vecumā no 15 līdz 25 gadiem, kurā kopā augam ticībā, attiecībās un identitātē.</span>
-            <span class="about-paragraph about-paragraph-highlight">Mūsu komandā ir sievietes dažādos vecumos un dzīves sezonās – no dažādām pilsētām un draudzēm. Mūs vieno mīlestība uz Jēzu un vēlme iedrošināt jaunās meitenes iepazīt Dievu un sevi.</span>
-            <span class="about-paragraph">2022.gada sākumā Dievs īpaši uzrunāja Martu un Sabīni par nometni meitenēm. Lūdzot un meklējot Dieva vadību, tika sperti pirmie soļi, un pamazām izveidojās komanda, kas ar prieku kalpo šajā nometnē.</span>
-          </p>
-        </div>
-        <img class="about-image" src="assets/vaditajas/komanda.webp" alt="Nometnes dalībnieces" data-i18n-attr="alt:about.imageAlt" />
-      </section>
+    <div class="hero-content">
+      <p class="hero-kicker" data-i18n="hero.kicker">MEITEŅU NOMETNE</p>
+      <h1 data-i18n="hero.title">Pazīt Tevi</h1>
+      <p class="hero-badge" data-i18n="hero.badge">2026</p>
+      <p class="hero-caption" data-i18n="hero.caption">30. jūlijs — 2. augusts</p>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSccI2GHdu2BFEukZKq_CNhr7xhRUPAUCy51gvwIo7NWw7q-Ww/viewform"
+        target="_blank" rel="noreferrer" class="btn btn-hero" data-i18n="hero.cta">Piesakies šī gada nometnei</a>
+    </div>
+  </header>
 
-      <section class="section-block leaders-section" id="team">
-        <div class="section-head">
-          <p class="section-tag" data-i18n="team.tag">Vadītājas</p>
-          <h2 data-i18n="team.title">Iepazīsti mūsu šī gada komandu</h2>
-          <p class="team-subtitle" data-i18n="team.subtitle">Komanda, kas ar prieku kalpo un rada vidi, kur meitenes var augt.</p>
+  <main>
+    <section class="section-block focus-section" id="focus">
+      <div class="section-head center">
+        <h2 data-i18n="focus.title">Mūsu fokuss</h2>
+        <p class="focus-subtitle" data-i18n="focus.subtitle">Sagatavot dievbijīgas sievietes nākamajai dzīves sezonai.
+        </p>
+      </div>
+      <div class="focus-layout">
+        <img src="assets/Fokuss.webp" alt="Meitenes aktivitātēs dabā" data-i18n-attr="alt:focus.imageAlt" />
+        <div class="focus-points">
+          <article class="focus-item">
+            <button class="focus-trigger" type="button" aria-expanded="false">
+              <span class="focus-icon" aria-hidden="true"><i data-lucide="leaf"></i></span>
+              <h3 class="focus-heading" data-i18n="focus.item1.title">Laiks dabā</h3>
+              <span class="focus-chevron" aria-hidden="true"><i data-lucide="chevron-down"></i></span>
+            </button>
+            <div class="focus-panel">
+              <p data-i18n="focus.item1.copy">Mēs daudz laika pavadām svaigā gaisā: sarunās, spēlēs, pastaigās un
+                kopīgos piedzīvojumos.</p>
+            </div>
+          </article>
+          <article class="focus-item">
+            <button class="focus-trigger" type="button" aria-expanded="false">
+              <span class="focus-icon" aria-hidden="true"><i data-lucide="palette"></i></span>
+              <h3 class="focus-heading" data-i18n="focus.item2.title">Meistarklases un radošums</h3>
+              <span class="focus-chevron" aria-hidden="true"><i data-lucide="chevron-down"></i></span>
+            </button>
+            <div class="focus-panel">
+              <p data-i18n="focus.item2.copy">No ēst gatavošanas līdz kustībai, skaistumkopšanai un radošām aktivitātēm.
+              </p>
+            </div>
+          </article>
+          <article class="focus-item">
+            <button class="focus-trigger" type="button" aria-expanded="false">
+              <span class="focus-icon" aria-hidden="true"><i data-lucide="sparkles"></i></span>
+              <h3 class="focus-heading" data-i18n="focus.item3.title">Garīgā izaugsme</h3>
+              <span class="focus-chevron" aria-hidden="true"><i data-lucide="chevron-down"></i></span>
+            </button>
+            <div class="focus-panel">
+              <p data-i18n="focus.item3.copy">Nometnes centrā ir laiks ar Dievu. Lekcijās, sarunās un klusumā mācāmies
+                labāk iepazīt Dievu un sevi.</p>
+            </div>
+          </article>
+          <article class="focus-item">
+            <button class="focus-trigger" type="button" aria-expanded="false">
+              <span class="focus-icon" aria-hidden="true"><i data-lucide="mountain"></i></span>
+              <h3 class="focus-heading" data-i18n="focus.item4.title">Izaicinājumi, kas stiprina</h3>
+              <span class="focus-chevron" aria-hidden="true"><i data-lucide="chevron-down"></i></span>
+            </button>
+            <div class="focus-panel">
+              <p data-i18n="focus.item4.copy">Ir arī brīži, kas palīdz pārkāpt savām robežām, vairojot drosmi, izturību,
+                uzticēšanos sev un komandai.</p>
+            </div>
+          </article>
+          <article class="focus-item">
+            <button class="focus-trigger" type="button" aria-expanded="false">
+              <span class="focus-icon" aria-hidden="true"><i data-lucide="heart"></i></span>
+              <h3 class="focus-heading" data-i18n="focus.item5.title">Kopība</h3>
+              <span class="focus-chevron" aria-hidden="true"><i data-lucide="chevron-down"></i></span>
+            </button>
+            <div class="focus-panel">
+              <p data-i18n="focus.item5.copy">Svarīga nometnes daļa ir būt kopā. Sarunas, smiekli un draudzība, kur vari
+                būt pieņemta tāda, kāda esi.</p>
+            </div>
+          </article>
         </div>
         <div class="carousel-shell leaders-shell">
           <div class="leaders-track" id="teamTrack" tabindex="0" aria-label="Vadītāju kartīšu karuselis">

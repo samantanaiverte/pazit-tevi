@@ -28,6 +28,11 @@ function updateLanguageToggle(language) {
   langToggle.setAttribute('aria-label', ariaLabel);
   langToggle.setAttribute('title', ariaLabel);
 }
+document.querySelectorAll('.leader-card img').forEach((image) => {
+  image.loading = 'eager';
+  image.decoding = 'async';
+  image.setAttribute('fetchpriority', 'high');
+});
 
 function t(key, fallback = '') {
   return TRANSLATIONS[currentLanguage]?.[key] || TRANSLATIONS.lv?.[key] || fallback;
@@ -767,6 +772,14 @@ function setupTeamScroller(track, prevButton, nextButton, stepSize = 1) {
   }
 
   const normalizedStep = Math.max(1, stepSize);
+  const dragThresholdPx = 6;
+  let activePointerId = null;
+  let dragStartX = 0;
+  let dragStartY = 0;
+  let dragStartScrollLeft = 0;
+  let dragDeltaX = 0;
+  let isDragging = false;
+  let suppressClick = false;
 
   function getCardStepPx() {
     const computedStyles = window.getComputedStyle(track);
@@ -829,6 +842,81 @@ function setupTeamScroller(track, prevButton, nextButton, stepSize = 1) {
   });
 
   track.addEventListener('scroll', refreshButtonState, { passive: true });
+  track.addEventListener('dragstart', (event) => {
+    event.preventDefault();
+  });
+  track.addEventListener('click', (event) => {
+    if (!suppressClick) {
+      return;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+    suppressClick = false;
+  }, true);
+
+  function finishPointerInteraction(event) {
+    if (activePointerId !== event.pointerId) {
+      return;
+    }
+
+    if (track.hasPointerCapture(event.pointerId)) {
+      track.releasePointerCapture(event.pointerId);
+    }
+
+    activePointerId = null;
+    track.classList.remove('is-dragging');
+    document.body.classList.remove('team-dragging');
+
+    window.setTimeout(() => {
+      suppressClick = false;
+    }, 0);
+
+    dragDeltaX = 0;
+    isDragging = false;
+    refreshButtonState();
+  }
+
+  track.addEventListener('pointerdown', (event) => {
+    if (event.pointerType === 'mouse' && event.button !== 0) {
+      return;
+    }
+
+    activePointerId = event.pointerId;
+    dragStartX = event.clientX;
+    dragStartY = event.clientY;
+    dragStartScrollLeft = track.scrollLeft;
+    dragDeltaX = 0;
+    isDragging = false;
+    suppressClick = false;
+    track.setPointerCapture(event.pointerId);
+  });
+
+  track.addEventListener('pointermove', (event) => {
+    if (activePointerId !== event.pointerId) {
+      return;
+    }
+
+    const deltaX = event.clientX - dragStartX;
+    const deltaY = event.clientY - dragStartY;
+
+    if (!isDragging) {
+      if (Math.abs(deltaX) < dragThresholdPx || Math.abs(deltaX) <= Math.abs(deltaY)) {
+        return;
+      }
+      isDragging = true;
+      suppressClick = true;
+      track.classList.add('is-dragging');
+      document.body.classList.add('team-dragging');
+    }
+
+    dragDeltaX = deltaX;
+    track.scrollLeft = dragStartScrollLeft - dragDeltaX;
+    event.preventDefault();
+  });
+
+  track.addEventListener('pointerup', finishPointerInteraction);
+  track.addEventListener('pointercancel', finishPointerInteraction);
+
   refreshButtonState();
 }
 
