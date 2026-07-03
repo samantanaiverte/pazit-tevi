@@ -1,0 +1,682 @@
+<!doctype html>
+<html lang="lv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pazīt Tevi | Atbalsta lapa 2026</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/png" href="../assets/Galerija/fav/Favicon%20PT.png" />
+    <link rel="shortcut icon" href="../assets/Galerija/fav/Favicon%20PT.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles.css?v=2026-04-11-1" />
+    <style>
+      body.private-support-page {
+        min-height: 100vh;
+        min-height: 100svh;
+        background:
+          radial-gradient(circle at 12% 14%, rgba(168, 151, 194, 0.14) 0%, rgba(168, 151, 194, 0) 28%),
+          radial-gradient(circle at 88% 10%, rgba(246, 241, 249, 0.96) 0%, rgba(246, 241, 249, 0) 34%),
+          linear-gradient(180deg, #fdfcfd 0%, #f7f3f7 52%, #fcfafc 100%);
+        color: #514c55;
+      }
+
+      .support-shell {
+        width: min(980px, calc(100% - 2rem));
+        margin: 0 auto;
+        padding: clamp(52px, 7vw, 92px) 0 clamp(84px, 10vw, 136px);
+      }
+
+      .support-card {
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(88, 73, 116, 0.09);
+        border-radius: 26px;
+        box-shadow: 0 24px 64px rgba(43, 35, 56, 0.08);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+      }
+
+      .support-card {
+        overflow: hidden;
+        animation: supportFadeIn 700ms ease-out both;
+      }
+
+      .support-hero {
+        padding: clamp(44px, 6vw, 68px) clamp(36px, 5vw, 58px);
+        border-bottom: 1px solid rgba(88, 73, 116, 0.08);
+        background:
+          radial-gradient(circle at top left, rgba(176, 161, 205, 0.16), rgba(176, 161, 205, 0) 42%),
+          linear-gradient(180deg, rgba(250, 247, 251, 0.82), rgba(255, 255, 255, 0.96));
+      }
+
+      .support-hero-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      .support-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: var(--space-3);
+        color: #8f7f9f;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .support-kicker::before {
+        content: "";
+        width: 34px;
+        height: 1px;
+        background: currentColor;
+      }
+
+      .support-title {
+        font-size: clamp(3rem, 6vw, 4.6rem);
+        margin-bottom: clamp(18px, 3vw, 28px);
+        color: #26212a;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        line-height: 0.98;
+        white-space: nowrap;
+      }
+
+      .support-intro {
+        max-width: 54ch;
+        color: #67616d;
+        font-size: 1.08rem;
+        line-height: 1.95;
+      }
+
+      .support-video-frame[hidden],
+      .support-video-placeholder[hidden] {
+        display: none !important;
+      }
+
+      .support-button,
+      .support-home-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 52px;
+        padding: 0.95rem 1.5rem;
+        border-radius: 999px;
+        border: 0;
+        font-weight: 700;
+        cursor: pointer;
+        transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+      }
+
+      .support-button:hover,
+      .support-home-link:hover {
+        transform: translateY(-1px);
+      }
+
+      .support-button:focus-visible,
+      .support-home-link:focus-visible {
+        outline: 2px solid rgba(168, 151, 194, 0.22);
+        outline-offset: 3px;
+      }
+
+      .language-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.35rem;
+        border-radius: 999px;
+        background: rgba(181, 167, 192, 0.14);
+        border: 1px solid rgba(143, 127, 159, 0.16);
+      }
+
+      .language-option {
+        border: 0;
+        background: transparent;
+        color: #655a6f;
+        padding: 0.5rem 0.85rem;
+        border-radius: 999px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background-color 180ms ease, color 180ms ease, transform 180ms ease;
+      }
+
+      .language-option:hover {
+        transform: translateY(-1px);
+      }
+
+      .language-option:focus-visible {
+        outline: 2px solid rgba(168, 151, 194, 0.22);
+        outline-offset: 2px;
+      }
+
+      .language-option.is-active {
+        background: #5e526a;
+        color: #fff;
+      }
+
+      .support-content {
+        padding: clamp(38px, 5vw, 54px) clamp(36px, 5vw, 58px) clamp(44px, 5vw, 62px);
+      }
+
+      .support-video-wrap {
+        margin-bottom: clamp(54px, 7vw, 82px);
+        display: grid;
+        place-items: center;
+      }
+
+      .support-video-frame,
+      .support-video-placeholder {
+        width: min(100%, 820px);
+        aspect-ratio: 16 / 8.8;
+        border: 0;
+        border-radius: 22px;
+        overflow: hidden;
+        background:
+          linear-gradient(135deg, rgba(92, 82, 106, 0.78), rgba(201, 192, 212, 0.52)),
+          #e9e2ed;
+        box-shadow: 0 22px 44px rgba(40, 31, 47, 0.08);
+      }
+
+      .support-video-frame {
+        display: block;
+      }
+
+      .support-video-placeholder {
+        display: grid;
+        place-items: center;
+        padding: clamp(18px, 4vw, 28px);
+        text-align: center;
+        color: #3d3543;
+      }
+
+      .support-video-placeholder strong {
+        display: block;
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        margin-bottom: var(--space-2);
+        font-weight: 600;
+      }
+
+      .story-flow {
+        width: min(100%, 760px);
+        margin: 0 auto;
+      }
+
+      .story-block + .story-block {
+        margin-top: clamp(38px, 6vw, 58px);
+      }
+
+      .section-label {
+        display: inline-block;
+        margin-bottom: 16px;
+        font-size: 0.78rem;
+        font-family: "Manrope", "Segoe UI", sans-serif;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: #8d7f98;
+        font-weight: 700;
+      }
+
+      .story-text {
+        max-width: 62ch;
+        font-size: 1.08rem;
+        line-height: 2;
+        color: #4f4a53;
+      }
+
+      .story-text p + p {
+        margin-top: 1.35rem;
+      }
+
+      .story-quote {
+        padding: clamp(26px, 4vw, 34px);
+        border-radius: 24px;
+        background: linear-gradient(180deg, rgba(249, 245, 249, 0.96), rgba(255, 255, 255, 0.98));
+        border: 1px solid rgba(88, 73, 116, 0.08);
+        box-shadow: 0 18px 38px rgba(40, 31, 47, 0.05);
+      }
+
+      .story-quote p {
+        max-width: 26ch;
+        margin: 0;
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: clamp(1.45rem, 2.8vw, 2rem);
+        line-height: 1.45;
+        color: #332d36;
+      }
+
+      .story-intro {
+        font-size: 1.14rem;
+        line-height: 2;
+      }
+
+      .story-list {
+        max-width: 62ch;
+        display: grid;
+        gap: 16px;
+        margin-top: 1.5rem;
+      }
+
+      .story-list-item {
+        display: grid;
+        grid-template-columns: 10px 1fr;
+        gap: 14px;
+        align-items: start;
+        color: #4f4a53;
+        font-size: 1.06rem;
+        line-height: 1.95;
+        font-weight: 700;
+      }
+
+      .story-list-item::before {
+        content: "";
+        width: 10px;
+        height: 10px;
+        margin-top: 0.72rem;
+        border-radius: 999px;
+        background: #c7bccf;
+      }
+
+      .donation-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 22px;
+        margin-bottom: 2rem;
+      }
+
+      .donation-card {
+        padding: 24px 22px 22px;
+        border-radius: 22px;
+        background: linear-gradient(180deg, rgba(250, 247, 251, 0.98), rgba(255, 255, 255, 0.98));
+        border: 1px solid rgba(88, 73, 116, 0.08);
+        box-shadow: 0 18px 36px rgba(40, 31, 47, 0.05);
+      }
+
+      .donation-amount {
+        display: block;
+        margin-bottom: 10px;
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: clamp(1.8rem, 3vw, 2.35rem);
+        line-height: 1;
+        color: #2b2530;
+      }
+
+      .donation-copy {
+        font-size: 0.98rem;
+        line-height: 1.8;
+        color: #5a5560;
+      }
+
+      .support-cta {
+        display: grid;
+        justify-items: center;
+        gap: clamp(44px, 6vw, 60px);
+        margin-top: clamp(44px, 6vw, 60px);
+      }
+
+      .support-bank {
+        width: min(100%, 540px);
+        padding: 22px 24px;
+        border-radius: 20px;
+        background: rgba(250, 247, 251, 0.9);
+        border: 1px solid rgba(88, 73, 116, 0.08);
+        text-align: center;
+      }
+
+      .support-bank p {
+        margin: 0;
+        color: #4f4a53;
+        line-height: 1.9;
+      }
+
+      .support-bank p + p {
+        margin-top: 0.2rem;
+      }
+
+      .support-cta-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 240px;
+        min-height: 54px;
+        padding: 0.95rem 1.7rem;
+        border-radius: 999px;
+        background: #5e526a;
+        color: #fff;
+        font-weight: 700;
+        box-shadow: 0 14px 28px rgba(94, 82, 106, 0.16);
+        transition: transform 180ms ease, box-shadow 180ms ease;
+      }
+
+      .support-cta-link:hover {
+        transform: translateY(-1px);
+      }
+
+      .support-cta-link:focus-visible {
+        outline: 2px solid rgba(168, 151, 194, 0.22);
+        outline-offset: 3px;
+      }
+
+      .support-home {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        margin-top: clamp(44px, 6vw, 60px);
+      }
+
+      .support-home-copy {
+        margin: 0;
+        color: #67616d;
+        font-size: 1rem;
+        line-height: 1.8;
+        text-align: center;
+      }
+
+      .support-home-link {
+        background: rgba(181, 167, 192, 0.12);
+        color: #54485f;
+        border: 1px solid rgba(143, 127, 159, 0.16);
+        min-width: 240px;
+      }
+
+      @keyframes supportFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(18px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .support-card {
+          animation: none;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .support-shell {
+          width: min(100%, calc(100% - 1rem));
+          padding-top: 20px;
+        }
+
+        .support-card {
+          border-radius: 18px;
+        }
+
+        .support-hero,
+        .support-content {
+          padding-left: 22px;
+          padding-right: 22px;
+        }
+
+        .support-hero-top {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .support-title,
+        .support-intro,
+        .story-text,
+        .story-quote p,
+        .story-list,
+        .story-list-item {
+          max-width: none;
+        }
+
+        .donation-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 860px) {
+        .donation-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body class="private-support-page">
+    <main class="support-shell">
+      <section class="support-card" aria-labelledby="support-page-title">
+        <div class="support-hero">
+          <div class="support-hero-top">
+            <p class="support-kicker" data-i18n="supportKicker">Atbalsta lapa</p>
+            <div class="language-toggle" aria-label="Language switcher">
+              <button class="language-option is-active" type="button" data-language-option="lv" aria-pressed="true">
+                LV
+              </button>
+              <button class="language-option" type="button" data-language-option="en" aria-pressed="false">EN</button>
+            </div>
+          </div>
+          <h1 class="support-title" id="support-page-title" data-i18n="supportTitle">Pazīt Tevi 2026</h1>
+          <p class="support-intro">
+            <span data-i18n="supportIntro"
+              >Nometnes priekš mums nekad nav bijušas tikai par aktivitātēm vai brīvā laika pavadīšanu. Tās vienmēr ir
+              bijušas Dieva dots instruments, vieta, kur var notikt pārmaiņas.
+
+              Nošķirts laiks ar Dievu un citām sievietēm ir iespēja apstāties, izvērtēt un pieņemt lēmumus dzīvot
+              citādāk, saskaņā ar to, uz ko aicina Dievs.</span
+            >
+          </p>
+        </div>
+
+        <div class="support-content" id="supportContent">
+          <div class="support-video-wrap">
+            <iframe
+              class="support-video-frame"
+              id="supportVideoFrame"
+              title="Pazīt Tevi atbalsta video"
+              data-i18n-attr="title:supportVideoTitle"
+              loading="lazy"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+              src="https://www.youtube-nocookie.com/embed/jjcZV4kq4XE"
+            ></iframe>
+          </div>
+
+          <div class="story-flow">
+        
+            <section class="story-block story-quote" aria-label="Izcelta doma" data-i18n-attr="aria-label:quoteAriaLabel">
+              <p data-i18n="quoteText">
+                Nometnes bieži kļūst par pagrieziena punktu, kur piedzīvot mieru, drosmi un iegūt skaidrību par savu
+                vērtību un identitāti.
+              </p>
+            </section>
+
+            <section class="story-block">
+              <p class="section-label" data-i18n="whyLabel">Kāpēc Tavs atbalsts ir svarīgs</p>
+              <div class="story-text">
+                <p data-i18n="whyParagraphOne">
+                  Mēs vienmēr esam saglabājuši dalības maksu salīdzinoši zemu, <strong>80€</strong>, lai tā būtu pēc
+                  iespējas pieejama un nekļūtu par šķērsli dalībai, tomēr daļa izmaksu paliek nenosegtas, un dažām
+                  meitenēm nepieciešams arī papildu atbalsts.
+                </p>
+                <p data-i18n="whyParagraphTwo">
+                  Lai nometnes varētu turpināt notikt kvalitatīvi un uzņemt vēl vairāk meiteņu, mums šogad ir
+                  konkrētas vajadzības:
+                </p>
+              </div>
+              <div class="story-list" aria-label="Atbalsta vajadzības" data-i18n-attr="aria-label:supportNeedsAriaLabel">
+                <div class="story-list-item" data-i18n="supportNeedOne">nometnes organizēšanas izmaksas</div>
+                <div class="story-list-item" data-i18n="supportNeedTwo">
+                  tehniskā nodrošinājuma uzlabošana, tai skaitā krēsli, apgaismojums un citas praktiskas lietas
+                </div>
+              </div>
+            </section>
+
+            <section class="story-block">
+              <p class="section-label" data-i18n="howLabel">Kā vari iesaistīties</p>
+              <div class="story-text">
+                <p data-i18n="howParagraph">Tu vari iesaistīties ļoti praktiskā veidā, ziedojot nometnēm:</p>
+              </div>
+              <div class="donation-grid" aria-label="Ziedojumu apmēri" data-i18n-attr="aria-label:donationLevelsAriaLabel">
+                <article class="donation-card">
+                  <span class="donation-amount">20€</span>
+                  <p class="donation-copy" data-i18n="donationCopyOne">Palīdz nosegt daļu dalības maksas kādai meitenei.</p>
+                </article>
+                <article class="donation-card">
+                  <span class="donation-amount">50€</span>
+                  <p class="donation-copy" data-i18n="donationCopyTwo">Sedz nozīmīgu daļu no nometnes izmaksām.</p>
+                </article>
+                <article class="donation-card">
+                  <span class="donation-amount">100€</span>
+                  <p class="donation-copy" data-i18n="donationCopyThree">Palīdz uzlabot nometnes vidi un tehnisko nodrošinājumu.</p>
+                </article>
+              </div>
+              <div class="story-text">
+                <p data-i18n="closingParagraph">
+                  Ja jūti, ka vēlies būt daļa no tā, ko Dievs dara, mēs būsim ļoti pateicīgi par Tavu finansiālu
+                  atbalstu.
+                </p>
+              </div>
+            </section>
+
+            <div class="support-cta">
+              <a class="support-cta-link" href="https://donate.stripe.com/4gMcN4gYY8fr5nKeHn3Ru00" target="_blank" rel="noreferrer" data-i18n="donateButton">Ziedo šeit</a>
+              <div class="support-bank">
+                <p><strong data-i18n="bankDetailsLabel">Rekvizīti:</strong></p>
+                <p>Biedrība “AUGT GODAM”</p>
+                <p data-i18n="registrationNumber">Reģ. Nr. 40008337235</p>
+                <p data-i18n="bankAccount">Konts: LV28HABA0551057973794</p>
+                <p data-i18n="paymentReference">Norāde: ziedojums nometnēm</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="support-home">
+            <p class="support-home-copy" data-i18n="homeCopy">Uzzini vairāk par nometni mūsu mājaslapā.</p>
+            <a class="support-home-link" href="/">pazittevi.lv</a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script>
+      const translations = {
+        lv: {
+          pageTitle: "Pazīt Tevi | Atbalsta lapa 2026",
+          supportVideoSrc: "https://www.youtube-nocookie.com/embed/jjcZV4kq4XE",
+          supportKicker: "Atbalsta lapa",
+          supportTitle: "Pazīt Tevi 2026",
+          supportIntro:
+            "Nometnes priekš mums nekad nav bijušas tikai par aktivitātēm vai brīvā laika pavadīšanu. Tās vienmēr ir bijušas Dieva dots instruments, vieta, kur var notikt pārmaiņas.<br><br>Nošķirts laiks ar Dievu un citām sievietēm ir iespēja apstāties, izvērtēt un pieņemt lēmumus dzīvot citādāk, saskaņā ar to, uz ko aicina Dievs.",
+          supportVideoTitle: "Pazīt Tevi atbalsta video",
+          quoteAriaLabel: "Izcelta doma",
+          quoteText:
+            "Nometnes bieži kļūst par pagrieziena punktu, kur piedzīvot mieru, drosmi un iegūt skaidrību par savu vērtību un identitāti.",
+          whyLabel: "Kāpēc Tavs atbalsts ir svarīgs",
+          whyParagraphOne:
+            "Mēs vienmēr esam saglabājuši dalības maksu salīdzinoši zemu, <strong>80€</strong>, lai tā būtu pēc iespējas pieejama un nekļūtu par šķērsli dalībai, tomēr daļa izmaksu paliek nenosegtas, un dažām meitenēm nepieciešams arī papildu atbalsts.",
+          whyParagraphTwo:
+            "Lai nometnes varētu turpināt notikt kvalitatīvi un uzņemt vēl vairāk meiteņu, mums šogad ir konkrētas vajadzības:",
+          supportNeedsAriaLabel: "Atbalsta vajadzības",
+          supportNeedOne: "nometnes organizēšanas izmaksas",
+          supportNeedTwo: "tehniskā nodrošinājuma uzlabošana, tai skaitā krēsli, apgaismojums un citas praktiskas lietas",
+          howLabel: "Kā vari iesaistīties",
+          howParagraph: "Tu vari iesaistīties ļoti praktiskā veidā, ziedojot nometnēm:",
+          donationLevelsAriaLabel: "Ziedojumu apmēri",
+          donationCopyOne: "Palīdz nosegt daļu dalības maksas kādai meitenei.",
+          donationCopyTwo: "Sedz nozīmīgu daļu no nometnes izmaksām.",
+          donationCopyThree: "Palīdz uzlabot nometnes vidi un tehnisko nodrošinājumu.",
+          closingParagraph:
+            "Ja jūti, ka vēlies būt daļa no tā, ko Dievs dara, mēs būsim ļoti pateicīgi par Tavu finansiālu atbalstu.",
+          donateButton: "Ziedo šeit",
+          bankDetailsLabel: "Rekvizīti:",
+          registrationNumber: "Reģ. Nr. 40008337235",
+          bankAccount: "Konts: LV28HABA0551057973794",
+          paymentReference: "Norāde: ziedojums nometnēm",
+          homeCopy: "Uzzini vairāk par nometni mūsu mājaslapā."
+        },
+        en: {
+          pageTitle: "Pazit Tevi | Support Page 2026",
+          supportVideoSrc: "https://www.youtube-nocookie.com/embed/TZ3xMRp_MqM",
+          supportKicker: "Support page",
+          supportTitle: "Pazit Tevi 2026",
+          supportIntro:
+            "For us, camps have never been only about activities or spending free time. They have always been a God-given instrument, a place where change can happen.<br><br>Time set apart with God and other women is an opportunity to pause, reflect, and choose to live differently, in line with what God is calling them to.",
+          supportVideoTitle: "Pazit Tevi support video",
+          quoteAriaLabel: "Highlighted thought",
+          quoteText:
+            "Camps often become a turning point where peace and courage are found, and where girls gain clarity about their value and identity.",
+          whyLabel: "Why your support matters",
+          whyParagraphOne:
+            "We have always kept the participation fee relatively low, <strong>80 EUR</strong>, so it stays as accessible as possible and does not become a barrier to attending. Still, part of the costs remain uncovered, and some girls also need additional support.",
+          whyParagraphTwo:
+            "For the camps to continue at a high quality and welcome even more girls, we have specific needs this year:",
+          supportNeedsAriaLabel: "Support needs",
+          supportNeedOne: "camp organization costs",
+          supportNeedTwo: "improving technical equipment, including chairs, lighting, and other practical essentials",
+          howLabel: "How you can get involved",
+          howParagraph: "You can support the camps in a very practical way by donating:",
+          donationLevelsAriaLabel: "Donation amounts",
+          donationCopyOne: "Helps cover part of one girl's participation fee.",
+          donationCopyTwo: "Covers a meaningful part of the camp costs.",
+          donationCopyThree: "Helps improve the camp environment and technical setup.",
+          closingParagraph:
+            "If you feel called to be part of what God is doing, we would be deeply grateful for your financial support.",
+          donateButton: "Donate here",
+          bankDetailsLabel: "Bank details:",
+          registrationNumber: "Reg. No. 40008337235",
+          bankAccount: "Account: LV28HABA0551057973794",
+          paymentReference: "Reference: donation for camps",
+          homeCopy: "Learn more about the camp on our website."
+        }
+      };
+
+      const setLanguage = (language) => {
+        const copy = translations[language];
+        if (!copy) return;
+
+        document.documentElement.lang = language;
+        document.title = copy.pageTitle;
+
+        const videoFrame = document.getElementById("supportVideoFrame");
+        if (videoFrame && copy.supportVideoSrc && videoFrame.getAttribute("src") !== copy.supportVideoSrc) {
+          videoFrame.setAttribute("src", copy.supportVideoSrc);
+        }
+
+        document.querySelectorAll("[data-i18n]").forEach((element) => {
+          const key = element.dataset.i18n;
+          if (copy[key]) {
+            element.innerHTML = copy[key];
+          }
+        });
+
+        document.querySelectorAll("[data-i18n-attr]").forEach((element) => {
+          const [attribute, key] = element.dataset.i18nAttr.split(":");
+          if (copy[key]) {
+            element.setAttribute(attribute, copy[key]);
+          }
+        });
+
+        document.querySelectorAll("[data-language-option]").forEach((button) => {
+          const isActive = button.dataset.languageOption === language;
+          button.classList.toggle("is-active", isActive);
+          button.setAttribute("aria-pressed", String(isActive));
+        });
+      };
+
+      document.querySelectorAll("[data-language-option]").forEach((button) => {
+        button.addEventListener("click", () => {
+          setLanguage(button.dataset.languageOption);
+        });
+      });
+    </script>
+  </body>
+</html>

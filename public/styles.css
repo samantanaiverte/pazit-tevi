@@ -421,6 +421,10 @@ img {
   color: rgba(255, 255, 255, 0.9);
 }
 
+.hero-kicker-break {
+  display: inline;
+}
+
 .hero-content h1 {
   font-size: clamp(3.5rem, 8.2vw, 88px);
   font-weight: 500;
@@ -2374,6 +2378,13 @@ body.review-modal-open {
     width: auto;
     min-width: 0;
     justify-content: center;
+  }
+}
+
+@media (max-width: 900px) {
+  .hero-kicker-break {
+    display: block;
+    margin-top: 0.2rem;
   }
 }
 

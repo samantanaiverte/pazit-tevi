@@ -47,7 +47,7 @@ function captureDomTranslations() {
       return;
     }
 
-    captured[key] = element.innerHTML.trim();
+    captured[key] = element.children.length ? element.innerHTML.trim() : element.textContent.trim();
   });
 
   return captured;
@@ -67,7 +67,7 @@ const TRANSLATIONS = {
     'nav.donate': 'Ziedot',
     'nav.donateAria': 'Ziedot nometnei',
     'nav.donateTitle': 'Atbalsti nometni',
-    'hero.kicker': 'MEITEŅU NOMETNE',
+    'hero.kicker': '<span>NOMETNE MEITENĒM</span><span class="hero-kicker-break">& JAUNĀM SIEVIETĒM</span>',
     'hero.title': 'Pazīt Tevi',
     'hero.badge': '2026',
     'hero.caption': '30. jūlijs — 2. augusts',
@@ -148,8 +148,8 @@ const TRANSLATIONS = {
     'nav.donate': 'Donate',
     'nav.donateAria': 'Donate to the camp',
     'nav.donateTitle': 'Support the camp',
-    'hero.kicker': "GIRLS' CAMP",
-    'hero.title': 'Pazit Tevi',
+    'hero.kicker': '<span>CAMP FOR GIRLS</span><span class="hero-kicker-break">& YOUNG WOMEN</span>',
+    'hero.title': 'Pazīt Tevi',
     'hero.badge': '2026',
     'hero.caption': 'JULY 30 — AUGUST 2',
     'hero.cta': "Apply for this year's camp",
